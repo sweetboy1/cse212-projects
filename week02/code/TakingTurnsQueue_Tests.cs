@@ -11,7 +11,9 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: Initially failed because the queue did not re-enqueue infinite or multi-turn players correctly.
+    // The GetNextPerson() method only handled turns > 1 and ignored turns <= 0 (infinite).
+    // Fixed by re-adding people whose turns <= 0 and decrementing turns for finite (>1) players.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -43,7 +45,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found: Same logic issue as before — missing re-enqueue for infinite and >1 turn players caused wrong order.
+    // After adding infinite-turn handling and proper decrementing, queue order matched expected sequence.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -85,7 +88,9 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: Initially failed because infinite-turn players (turns <= 0) were not re-added.
+    // Also, infinite players’ Turns values were incorrectly decremented.
+    // Fixed by checking (turns <= 0) first and re-adding them without modifying Turns.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -116,7 +121,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: Same as TestTakingTurnsQueue_ForeverZero — infinite-turn players were not properly re-added
+    // and had their turn counts altered. Fixed by preserving Turns for infinite players (<= 0) and re-enqueuing them.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -143,7 +149,8 @@ public class TakingTurnsQueueTests
     [TestMethod]
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) Found: Originally failed because GetNextPerson() returned null instead of throwing an InvalidOperationException.
+    // Fixed by explicitly checking IsEmpty() and throwing new InvalidOperationException("No one in the queue.")
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
