@@ -66,7 +66,8 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Iterate backward through the BST.
+    /// Problem 3: Iterate backward through the BST.
+    /// This is the reversed inorder traversal (right-root-left).
     /// </summary>
     public IEnumerable Reverse()
     {
@@ -78,9 +79,33 @@ public class BinarySearchTree : IEnumerable<int>
         }
     }
 
+    /// <summary>
+    /// Problem 3: Traverse Backward
+    /// Implement the TraverseBackward function to traverse the tree in reverse order.
+    /// This should visit nodes in descending order (largest to smallest).
+    /// </summary>
     private void TraverseBackward(Node? node, List<int> values)
     {
-        // TODO Problem 3
+        if (node is not null)
+        {
+            // First traverse right subtree (larger values)
+            TraverseBackward(node.Right, values);
+            
+            // Then add current node
+            values.Add(node.Data);
+            
+            // Finally traverse left subtree (smaller values)
+            TraverseBackward(node.Left, values);
+        }
+    }
+
+    /// <summary>
+    /// Alternative implementation using yield return (if needed)
+    /// This method can be added if the tests require a different approach.
+    /// </summary>
+    public IEnumerable<int> Reversed()
+    {
+        return Reverse().Cast<int>();
     }
 
     /// <summary>
