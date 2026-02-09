@@ -17,6 +17,7 @@ public static class Trees
     }
 
     /// <summary>
+    /// Problem 5: Create Tree from Sorted List
     /// This function will attempt to insert the item in the middle of 'sortedNumbers' into
     /// the 'bst' tree. The middle is determined by using indices represented by 'first' and
     /// 'last'.
@@ -48,6 +49,20 @@ public static class Trees
     /// <param name="bst">the BinarySearchTree in which to insert the values</param>
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst)
     {
-        // TODO Start Problem 5
+        // Base case: if first > last, the range is empty, return
+        if (first > last)
+            return;
+        
+        // Calculate the middle index
+        int middle = (first + last) / 2;
+        
+        // Insert the middle element into the BST
+        bst.Insert(sortedNumbers[middle]);
+        
+        // Recursively process the left half (elements before middle)
+        InsertMiddle(sortedNumbers, first, middle - 1, bst);
+        
+        // Recursively process the right half (elements after middle)
+        InsertMiddle(sortedNumbers, middle + 1, last, bst);
     }
 }
