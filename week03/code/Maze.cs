@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 /// <summary>
 /// Defines a maze using a dictionary. The dictionary is provided by the
 /// user when the Maze object is created. The dictionary will contain the
@@ -25,14 +28,29 @@ public class Maze
         _mazeMap = mazeMap;
     }
 
-    // TODO Problem 4 - ADD YOUR CODE HERE
     /// <summary>
     /// Check to see if you can move left.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        // Check if current position exists in maze map
+        var currentPos = (_currX, _currY);
+        if (!_mazeMap.ContainsKey(currentPos))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if left movement is allowed (index 0 in the bool array)
+        bool[] directions = _mazeMap[currentPos];
+        if (directions.Length > 0 && directions[0]) // left is at index 0
+        {
+            _currX--; // Move left decreases x coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -41,7 +59,23 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        // Check if current position exists in maze map
+        var currentPos = (_currX, _currY);
+        if (!_mazeMap.ContainsKey(currentPos))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if right movement is allowed (index 1 in the bool array)
+        bool[] directions = _mazeMap[currentPos];
+        if (directions.Length > 1 && directions[1]) // right is at index 1
+        {
+            _currX++; // Move right increases x coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -50,7 +84,23 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        // Check if current position exists in maze map
+        var currentPos = (_currX, _currY);
+        if (!_mazeMap.ContainsKey(currentPos))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if up movement is allowed (index 2 in the bool array)
+        bool[] directions = _mazeMap[currentPos];
+        if (directions.Length > 2 && directions[2]) // up is at index 2
+        {
+            _currY--; // Move up decreases y coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -59,7 +109,23 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        // Check if current position exists in maze map
+        var currentPos = (_currX, _currY);
+        if (!_mazeMap.ContainsKey(currentPos))
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // Check if down movement is allowed (index 3 in the bool array)
+        bool[] directions = _mazeMap[currentPos];
+        if (directions.Length > 3 && directions[3]) // down is at index 3
+        {
+            _currY++; // Move down increases y coordinate
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
